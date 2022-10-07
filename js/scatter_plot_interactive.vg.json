@@ -1,0 +1,144 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 1550,
+  "height": 800,
+  "title": "COVID-19 Cumulative Cases per Country (15 Sept 2022)",
+  "data": {
+    "url": "https://raw.githubusercontent.com/isaaczhou2/week10homework/main/data/most_recent_records.csv"
+  },
+  "params": [
+    {
+      "name": "Region_selection",
+      "bind": {
+        "input": "select",
+        "options": [
+          null,
+          "EMRO",
+          "EURO",
+          "AFRO",
+          "AMRO",
+          "SEARO",
+          "WPRO"
+        ],
+        "labels": [
+          "Show All",
+          "Eastern Mediterranean Region",
+          "European Region",
+          "African Region",
+          "Region of the Americas",
+          "South-East Asian Region",
+          "Western Pacific Region"
+        ],
+        "name": "Select Region: "
+      }
+    }
+  ],
+  "transform": [
+    {"filter": "datum.Cumulative_cases > 0"},
+    {"filter": "datum.Cumulative_deaths > 0"},
+    {
+      "filter": "Region_selection == null || datum.WHO_region == Region_selection"
+    },
+    {
+      "calculate": "datum.Cumulative_deaths/datum.Cumulative_cases * 10000",
+      "as": "Death per 10,000 cases"
+    }
+
+  ],
+  "encoding": {
+    "x": {
+      "field": "Cumulative_cases",
+      "type": "quantitative",
+      "title": "Cumulative Cases",
+      "axis": {"tickCount": 7},
+      "scale": {"type": "log", "domain": [1, 200000000]}
+    },
+    "y": {
+      "field": "Cumulative_deaths",
+      "type": "quantitative",
+      "title": "Cumulative Death",
+      "axis": {"tickCount": 6},
+      "scale": {"type": "log", "domain": [1, 10000000]}
+    }
+  },
+  "layer": [
+    {
+      "mark": "circle",
+      "encoding": {
+        "size": {
+          "field": "Death per 10,000 cases",
+          "type": "quantitative",
+          "scale": {
+            "type": "threshold",
+            "domain": [10, 70, 200, 300, 400],
+            "range": [50, 150, 300, 600, 800, 1200]
+          },
+          "legend": {"format": ".1s","title":"Death per 10,000 cases"}},
+          
+        "color": {
+          "field": "WHO_region",
+          "title":"WHO region",
+          "legend": {
+        "labelExpr": "{'EMRO': 'Eastern Mediterranean Region', 'EURO': 'European Region','AFRO': 'African Region', 'AMRO': 'Region of the Americas','SEARO': 'South-East Asian Region','WPRO': 'Western Pacific Region'}[datum.label]"
+      },
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "EMRO",
+              "EURO",
+              "AFRO",
+              "AMRO",
+              "SEARO",
+              "WPRO"
+            ],
+            
+            "range": [
+              "#e41a1c",
+              "#984ea3",
+              "#ff7f00",
+              "#a6cee3",
+              "#377eb8",
+              "#a65628"
+            ]
+            
+          }
+        },
+        "opacity": {"value": 0.6},
+        "tooltip": [
+          {"field": "Country", "type": "nominal", "title": "Country/Region"},
+          {"field": "Cumulative_cases", "type": "quantitative", "format": ",","title":"Cumulative cases"},
+          {"field": "Cumulative_deaths", "type": "quantitative", "format": ",","title":"Cumulative deaths"},
+          {"field":"Death per 10,000 cases", "type": "quantitative", "format": ".2f"}
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "middle",
+        "dx": -12,
+        "fontSize": 11.5,
+        "fontStyle": "italic"
+      },
+      "encoding": {
+        "text": {"field": "Country", "type": "nominal"},
+        "color": {"value": "black"},
+        "opacity": {
+          "condition": {
+            "test": "datum['Country'] == 'China' || datum['Country'] == 'Singapore' || datum['Country'] == 'Australia' || datum['Country'] == 'New Zealand' || datum['Country'] == 'Italy' || datum['Country'] == 'Yemen' ||  datum['Country'] == 'United States'",
+            "value": 1
+          },
+          "value": 0
+        },
+        "tooltip": [
+          {"field": "Country", "type": "nominal", "title": "Country/Region"},
+          {"field": "Cumulative_cases", "type": "quantitative", "format": ",","title":"Cumulative cases"},
+          {"field": "Cumulative_deaths", "type": "quantitative", "format": ",","title":"Cumulative deaths"},
+          {"field":"Death per 10,000 cases", "type": "quantitative", "format": ".2f"}
+
+        ]
+      }
+    }
+  ]
+}
