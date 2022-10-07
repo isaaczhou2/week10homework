@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Import Vega & Vega-Lite (does not have to be from CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+  
+  <!-- CSS file -->
+  <link rel="stylesheet" type="text/css" href="css/styles.css" media="all">
+
+
+</head>
+<body>
+
+  <div class="page">
+
+    <!-- pure grid group -->
+    <div class="pure-g">
+      <div class="pure-u-1-1">
+        <h1>Week 10 Homework</h1>
+        <p>This is the week 10 homework visualisation page.</p>
+      </div>
+    </div>
+    <!-- end pure grid group -->
+
+  <div id="homeworkweek9"></div>
+
+    <script type="text/javascript">
+
+      var spec2 = "js/homeworkweek9.vg.json";
+      vegaEmbed('#homeworkweek9', spec2).then(function(result) {
+        // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+      }).catch(console.error);
+    </script>
+
+  <div id="homeworkweek10"></div>
+    <script type="text/javascript">
+
+      var spec2 = "js/scatter_plot_interactive.vg.json";
+      vegaEmbed('#homeworkweek10', spec2).then(function(result) {
+        // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+      }).catch(console.error);
+    </script>
+
+</body>
+</html>
